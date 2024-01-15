@@ -8,5 +8,12 @@
   "main": "index.js",
   "repository": "https://github.com/vsifiwe/chatroom.git",
   "author": "Manzi Elyse <asifiwemanzi@gmail.com>",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js"
+  }
 }
