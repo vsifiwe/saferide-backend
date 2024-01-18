@@ -19,6 +19,8 @@ let messageService = new MessageService()
 // variables
 const port = 3000
 
+app.use(express.static(__dirname));
+
 app.get('/', async (req, res) => {
 
   const sequelize = new Db().getConnection();

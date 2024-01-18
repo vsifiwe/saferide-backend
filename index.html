@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            height: 100vh;
+            width: 100vw;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .login {
+            /* display: none; */
+            max-width: 50vw;
+        }
+
+        .login button {
+            width: 40%;
+            margin: 10px 0px;
+            padding: 5px;
+            border: 1px solid black;
+            border-radius: 4px;
+            background-color: #5c9acf;
+        }
+
+        .dashboard {
+            display: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 20px;
+            margin: 10px 0px;
+            background-color: #5c9acf;
+        }
+
+        .dashboard button {
+            margin: 10px 0px;
+            padding: 5px;
+            border: 1px solid black;
+            border-radius: 4px;
+            background-color: lightsalmon;
+        }
+
+        .messages {
+            padding: 10px 0px;
+        }
+
+        .message {
+            background-color: lightgray;
+        }
+
+        .message-head {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0px 20px;
+        }
+
+        .message-body {
+            padding: 0px 20px 10px 20px;
+        }
+
+        .footer {
+            background-color: #5c9acf;
+            display: flex;
+            justify-content: center;
+        }
+
+        .dashboard form input {
+            line-height: 4em;
+            margin-bottom: 20px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="login">
+        <h1>FSE Chat Room</h1>
+            <p>Username</p>
+            <input type="text" name="username" required="required" />
+            <p>Password</p>
+            <input type="password" name="password" required="required" />
+            <div>
+                <button onclick="login()">Login</button>
+                <button onclick="register()">Register</button>
+            </div>
+    </div>
+
+    <div class="dashboard">
+        <div class="header">
+            <h4>FSE Chat Room</h4>
+            <button onclick="logout()">Logout</button>
+        </div>
+        <div class="messages">
+            <div class="message">
+                <div class="message-head">
+                    <h5>Username</h5>
+                    <p>Time</p>
+                </div>
+                <p class="message-body">Message</p>
+            </div>
+
+            <div class="message">
+                <div class="message-head">
+                    <h5>Username</h5>
+                    <p>Time</p>
+                </div>
+                <p class="message-body">Message</p>
+            </div>
+
+            <div class="message">
+                <div class="message-head">
+                    <h5>Username</h5>
+                    <p>Time</p>
+                </div>
+                <p class="message-body">Message</p>
+            </div>
+        </div>
+
+        <form>
+            <input type="text" name="message" required="required" height="12"/>
+            <div class="footer">
+                <button type="submit">Send</button>
+            </div>
+
+        </form>
+    </div>
+
+    <script>
+
+        let token = null
+
+        async function register(){
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+            const response = await fetch('http://localhost:3000/auth/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password})
+            });
+            const data = await response.json();
+            alert(data.message);
+        }
+
+        async function login(){
+            const username = document.querySelector('input[name="username"]').value;
+            const password = document.querySelector('input[name="password"]').value;
+
+            const response = await fetch('http://localhost:3000/auth/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({username, password})
+            });
+            const data = await response.json();
+            
+            if(data.code === 200){
+                document.querySelector('.login').style.display = 'none';
+                document.querySelector('.dashboard').style.display = 'block';
+
+                token = data.token;
+
+                getMessages();
+            }else{
+                alert(data.message);
+            }
+        }
+
+
+        async function getMessages(){
+            let bearer = 'Bearer ' + token;
+            console.log(bearer);
+            const response = await fetch('http://localhost:3000/chat', {
+                headers: {
+                    Authorization: "Bearer " + token
+                }
+            })
+
+            const data = await response.json();
+
+            console.log(data);
+        }
+
+        async function logout() {
+            token = null;
+            document.querySelector('.dashboard').style.display = 'none';
+            document.querySelector('.login').style.display = 'block';
+        }
+    </script>
+</body>
+
+</html>
