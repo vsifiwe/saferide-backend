@@ -134,8 +134,14 @@
         </form>
     </div>
 
+    <script src="/socket.io/socket.io.js"></script>
     <script>
 
+        let socket = io()
+
+        socket.on('new-message', () => {
+            console.log('a new message received')
+        })
         let token = null
 
         async function register(){
