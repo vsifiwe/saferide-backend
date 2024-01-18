@@ -1,4 +1,7 @@
 const express = require('express')
+const { Server } = require('socket.io');
+
+// Services
 const AuthService = require('./services/auth.services');
 const MessageService = require('./services/message.services');
 const { authenticateToken } = require('./helpers/middleware');
@@ -8,6 +11,8 @@ const { UserModel } = require('./models/User.model');
 // Initializations
 const app = express()
 app.use(express.json())
+const server = require('http').createServer(app);
+const io = new Server(server);
 let messageService = new MessageService()
 
 
@@ -50,18 +55,25 @@ app.post('/auth/logout', (req, res) => {
   res.send('Logout endpoint')
 })
 
-app.get('/chat', authenticateToken, (req, res) => {
-  messageService.getMessages()
-  res.send('Chat endpoint')
+app.get('/chat', authenticateToken, async (req, res) => {
+  const messages = await messageService.getMessages()
+  res.send({
+    "messages": messages,
+    "code": 200,
+  })
 })
 
-app.post('/chat/new', authenticateToken, async (req, res) => {
+app.post('/chat', authenticateToken, async (req, res) => {
   const message = req.body.message
   const username = req.user.username
 
   await messageService.addMessage(message, username)
+  io.emit('new-message', {message, username})
 
-  res.send('New chat endpoint')
+  res.send({
+    "message": "success", 
+    "code": 200,
+  })
 })
 
 app.listen(port, () => {
