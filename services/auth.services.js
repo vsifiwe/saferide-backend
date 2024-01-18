@@ -16,8 +16,6 @@ class AuthService {
     const user = await User.findOne({ where: { username: username } })
 
     if (user) {
-      console.log(user.username)
-
       // compare password
       if (bcrypt.compareSync(password, user.password)) {
         const token = await this.generateToken(user)
@@ -84,7 +82,6 @@ class AuthService {
       return {status: true, data: decoded}
 
     } catch (err) {
-      console.log(err)
       return {status: false, error: err}
     }
   }

@@ -185,8 +185,6 @@
 
 
         async function getMessages(){
-            let bearer = 'Bearer ' + token;
-            console.log(bearer);
             const response = await fetch('http://localhost:3000/chat', {
                 headers: {
                     Authorization: "Bearer " + token
