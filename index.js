@@ -1,5 +1,6 @@
 const express = require('express')
 const AuthService = require('./services/auth.services');
+const MessageService = require('./services/message.services');
 const { authenticateToken } = require('./helpers/middleware');
 const { Db } = require('./helpers/db');
 const { UserModel } = require('./models/User.model');
@@ -7,6 +8,8 @@ const { UserModel } = require('./models/User.model');
 // Initializations
 const app = express()
 app.use(express.json())
+let messageService = new MessageService()
+
 
 // variables
 const port = 3000
@@ -48,10 +51,16 @@ app.post('/auth/logout', (req, res) => {
 })
 
 app.get('/chat', authenticateToken, (req, res) => {
+  messageService.getMessages()
   res.send('Chat endpoint')
 })
 
-app.post('/chat/new', (req, res) => {
+app.post('/chat/new', authenticateToken, async (req, res) => {
+  const message = req.body.message
+  const username = req.user.username
+
+  await messageService.addMessage(message, username)
+
   res.send('New chat endpoint')
 })
 

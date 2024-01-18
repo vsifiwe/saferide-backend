@@ -12,9 +12,9 @@ function authenticateToken(req, res, next) {
   
     const result = authService.verifyToken(token);
   
-    if (!result.success) {
+    if (result.status === false) {
       return res.send({
-        "message": "Invalid token" + result.error,
+        "message": result.error.message,
         "code": 401,
       });
     }

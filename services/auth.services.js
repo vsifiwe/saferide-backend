@@ -81,9 +81,11 @@ class AuthService {
   verifyToken = (token) => {
     try{
       const decoded = jwt.verify(token, this.secret)
-      return decoded
+      return {status: true, data: decoded}
+
     } catch (err) {
       console.log(err)
+      return {status: false, error: err}
     }
   }
 
