@@ -1,4 +1,5 @@
 const { DataTypes } = require('sequelize');
+const { Db } = require('../helpers/db');
 
 const UserModel = {
   username: {
@@ -12,4 +13,7 @@ const UserModel = {
   }
 }
 
+const User = new Db().getConnection().define('User', UserModel);
+
+exports.User = User
 exports.UserModel = UserModel

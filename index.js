@@ -1,22 +1,21 @@
 const express = require('express')
-const { Sequelize } = require('sequelize');
-const { UserModel } = require('./Models/UserModel')
+const AuthService = require('./services/auth.services');
+const { authenticateToken } = require('./helpers/middleware');
+const { Db } = require('./helpers/db');
+const { UserModel } = require('./models/User.model');
 
 // Initializations
-const sequelize = new Sequelize({
-  dialect: "sqlite",
-  storage: "db.sqlite"
-})
 const app = express()
 app.use(express.json())
-
-const User = sequelize.define('User', UserModel);
 
 // variables
 const port = 3000
 
 app.get('/', async (req, res) => {
-  
+
+  const sequelize = new Db().getConnection();
+  sequelize.define('User', UserModel);
+
   sequelize.sync().then(() => {
     res.send('Tables created successfully');
   }).catch((error) => {
@@ -26,53 +25,29 @@ app.get('/', async (req, res) => {
 })
 
 app.post('/auth/register', async (req, res) => {
-  let username = req.body.username
-  let password = req.body.password
+  // get username and password from request body
+  let { username, password } = req.body
 
-  const user = await User.findOne({ where: { username: username } })
+  let authService = new AuthService()
+  let response = await authService.register(username, password)
 
-  if(user) {
-
-    res.send('User already exists')
-
-  } else {
-
-    await User.create({ username: username, password: password })
-    res.send('User created successfully')
-
-  }
+  res.send(response)
 })
 
 app.post('/auth/login', async (req, res) => {
-  let username = req.body.username
-  let password = req.body.password
+  let {username, password} = req.body
 
-  const user = await User.findOne({ where: { username: username } })
+  let authService = new AuthService()
+  let response = await authService.login(username, password)
 
-  if(user) {
-
-    if(user.password == password) {
-
-      res.send('User logged in successfully')
-
-    } else {
-
-      res.send('Incorrect login details')
-
-    }
-
-  } else {
-
-    res.send('User does not exist')
-
-  }
+  res.send(response)
 })
 
 app.post('/auth/logout', (req, res) => {
   res.send('Logout endpoint')
 })
 
-app.get('/chat', (req, res) => {
+app.get('/chat', authenticateToken, (req, res) => {
   res.send('Chat endpoint')
 })
 
