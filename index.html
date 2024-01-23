@@ -15,7 +15,7 @@
 
         .login {
             /* display: none; */
-            max-width: 50vw;
+            max-width: 100vw;
         }
 
         .login button {
@@ -29,6 +29,7 @@
 
         .dashboard {
             display: none;
+            width: 50vw;
         }
 
         .header {
@@ -46,6 +47,7 @@
             border: 1px solid black;
             border-radius: 4px;
             background-color: lightsalmon;
+            width: 100px;
         }
 
         .messages {
@@ -76,6 +78,8 @@
         .dashboard form input {
             line-height: 4em;
             margin-bottom: 20px;
+            width: 100%;
+            
         }
     </style>
 </head>
@@ -100,29 +104,6 @@
             <button onclick="logout()">Logout</button>
         </div>
         <div class="messages">
-            <div class="message">
-                <div class="message-head">
-                    <h5>Username</h5>
-                    <p>Time</p>
-                </div>
-                <p class="message-body">Message</p>
-            </div>
-
-            <div class="message">
-                <div class="message-head">
-                    <h5>Username</h5>
-                    <p>Time</p>
-                </div>
-                <p class="message-body">Message</p>
-            </div>
-
-            <div class="message">
-                <div class="message-head">
-                    <h5>Username</h5>
-                    <p>Time</p>
-                </div>
-                <p class="message-body">Message</p>
-            </div>
         </div>
 
         <form>
@@ -137,11 +118,11 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
 
-        let socket = io()
+        // const socket = io()
 
-        socket.on('new-message', () => {
-            console.log('a new message received')
-        })
+        // socket.on('new-message', () => {
+        //     console.log('a new message received')
+        // })
         let token = null
 
         async function register(){
@@ -185,6 +166,7 @@
 
 
         async function getMessages(){
+
             const response = await fetch('http://localhost:3000/chat', {
                 headers: {
                     Authorization: "Bearer " + token
@@ -193,7 +175,33 @@
 
             const data = await response.json();
 
-            console.log(data);
+            for(let i = 0; i < data.messages.length; i++){
+
+                const message = data.messages[i];
+                const messageElement = document.createElement('div');
+                messageElement.classList.add('message');
+
+                const messageHead = document.createElement('div');
+                messageHead.classList.add('message-head');
+
+                const username = document.createElement('h3');
+                username.innerText = message.username;
+
+                const time = document.createElement('p');
+                time.innerText = new Date(message.createdAt).toLocaleString();
+
+                messageHead.appendChild(username);
+                messageHead.appendChild(time);
+
+                const messageBody = document.createElement('p');
+                messageBody.classList.add('message-body');
+                messageBody.innerText = message.message;
+
+                messageElement.appendChild(messageHead);
+                messageElement.appendChild(messageBody);
+
+                document.querySelector('.messages').appendChild(messageElement);
+            }
         }
 
         async function logout() {
