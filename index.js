@@ -96,7 +96,7 @@ app.get('/test', (req, res) => {
 io.on('connection', (socket) => {
   console.log('a user connected');
   socket.on('test', (msg) => {
-    console.log("test event received");
+    console.log("test event received" + msg);
   })
   socket.on("disconnect", () => {
     console.log("a user disconnected")

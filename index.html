@@ -75,7 +75,7 @@
             justify-content: center;
         }
 
-        .dashboard form input {
+        .dashboard input {
             line-height: 4em;
             margin-bottom: 20px;
             width: 100%;
@@ -106,13 +106,10 @@
         <div class="messages">
         </div>
 
-        <form>
             <input type="text" name="message" required="required" height="12"/>
             <div class="footer">
-                <button type="submit">Send</button>
+                <button onclick="sendMessage()">Send</button>
             </div>
-
-        </form>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
@@ -122,6 +119,7 @@
 
         socket.on('new-message', () => {
             console.log('a new message received')
+            getMessages()
         })
         let token = null
 
@@ -174,6 +172,8 @@
             })
 
             const data = await response.json();
+            
+            document.querySelector('.messages').innerHTML = '';
 
             for(let i = 0; i < data.messages.length; i++){
 
@@ -201,6 +201,27 @@
                 messageElement.appendChild(messageBody);
 
                 document.querySelector('.messages').appendChild(messageElement);
+            }
+        }
+
+        async function sendMessage(){
+            const message = document.querySelector('input[name="message"]').value;
+
+            const response = await fetch('http://localhost:3000/chat', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: "Bearer " + token
+                },
+                body: JSON.stringify({message})
+            });
+
+            const data = await response.json();
+
+            if(data.code === 200){
+                document.querySelector('input[name="message"]').value = '';
+            }else{
+                alert(data.message);
             }
         }
 
