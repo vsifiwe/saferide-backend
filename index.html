@@ -118,11 +118,11 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
 
-        // const socket = io()
+        const socket = io()
 
-        // socket.on('new-message', () => {
-        //     console.log('a new message received')
-        // })
+        socket.on('new-message', () => {
+            console.log('a new message received')
+        })
         let token = null
 
         async function register(){
