@@ -8,6 +8,7 @@ const MessageService = require('./services/message.services');
 const { authenticateToken } = require('./helpers/middleware');
 const { Db } = require('./helpers/db');
 const { UserModel } = require('./models/User.model');
+const { MessageModel } = require('./models/message.model');
 
 // variables
 const port = 3000
@@ -27,18 +28,20 @@ let messageService = new MessageService()
 
 app.get('/', async (req, res) => {
   res.sendFile(join(__dirname, 'index.html'));
-  
+})
+
+app.get('/init', async (req, res) => {
   // initialize db and tables
 
-  // const sequelize = new Db().getConnection();
-  // sequelize.define('User', UserModel);
+  const sequelize = new Db().getConnection();
+  sequelize.define('User', UserModel);
+  sequelize.define('Message', MessageModel)
 
-  // sequelize.sync().then(() => {
-  //   res.send('Tables created successfully');
-  // }).catch((error) => {
-  //   res.send('Unable to create tables : ' + error);
-  // });
-
+  sequelize.sync().then(() => {
+    res.send('Tables created successfully');
+  }).catch((error) => {
+    res.send('Unable to create tables : ' + error);
+  });
 })
 
 app.post('/auth/register', async (req, res) => {
@@ -79,14 +82,6 @@ app.post('/chat', authenticateToken, async (req, res) => {
   await messageService.addMessage(message, username)
   io.emit('new-message', {message, username})
 
-  res.send({
-    "message": "success", 
-    "code": 200,
-  })
-})
-
-app.get('/test', (req, res) => {
-  io.emit('test', { message: 'hello' });
   res.send({
     "message": "success", 
     "code": 200,

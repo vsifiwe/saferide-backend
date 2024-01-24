@@ -15,3 +15,4 @@ const MessageModel = {
 const Message = new Db().getConnection().define('Message', MessageModel);
 
 exports.Message = Message
+exports.MessageModel = MessageModel
