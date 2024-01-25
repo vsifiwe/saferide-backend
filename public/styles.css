@@ -1,0 +1,77 @@
+body {
+    height: 100vh;
+    width: 100vw;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.login {
+    max-width: 100vw;
+}
+
+.login button {
+    width: 40%;
+    margin: 10px 0px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: #5c9acf;
+}
+
+.dashboard {
+    display: none;
+    width: 50vw;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+    margin: 10px 0px;
+    background-color: #5c9acf;
+}
+
+.dashboard button {
+    margin: 10px 0px;
+    padding: 5px;
+    border: 1px solid black;
+    border-radius: 4px;
+    background-color: lightsalmon;
+    width: 100px;
+}
+
+.messages {
+    padding: 10px 0px;
+    height: 50vh;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.message {
+    background-color: lightgray;
+}
+
+.message-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 20px;
+}
+
+.message-body {
+    padding: 0px 20px 10px 20px;
+}
+
+.footer {
+    background-color: #5c9acf;
+    display: flex;
+    justify-content: center;
+}
+
+.dashboard input {
+    line-height: 4em;
+    margin-bottom: 20px;
+    width: 100%;
+}
