@@ -120,6 +120,7 @@
         // define variables
         const socket = io()
         let token = null
+        let loggedInUsername = null
 
         socket.on('new-message', () => {
             getMessages()
@@ -167,6 +168,7 @@
                 document.querySelector('.dashboard').style.display = 'block';
 
                 token = data.token;
+                loggedInUsername = data.username;
                 socket.emit('user connected', socket.id)
                 getMessages();
             }else{
@@ -196,7 +198,10 @@
                 messageHead.classList.add('message-head');
 
                 const username = document.createElement('h3');
-                username.innerText = message.username;
+                if(message.username === loggedInUsername)
+                    username.innerText = 'Me';
+                else
+                    username.innerText = message.username;
 
                 const time = document.createElement('p');
                 time.innerText = new Date(message.createdAt).toLocaleString();
@@ -239,6 +244,7 @@
 
         async function logout() {
             token = null;
+            username = null;
             document.querySelector('.dashboard').style.display = 'none';
             document.querySelector('.login').style.display = 'block';
             socket.emit('user disconnected', socket.id)

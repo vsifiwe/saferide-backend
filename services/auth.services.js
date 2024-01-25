@@ -22,7 +22,8 @@ class AuthService {
         return {
           "message": "User logged in successfully",
           "code": 200,
-          "token": token
+          "token": token, 
+          "username": username,
         }
       } else {
         return {
