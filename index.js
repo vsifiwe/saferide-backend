@@ -32,18 +32,10 @@ app.use('/chat', messageRoutes)
 
 // socket handling
 io.on('connection', (socket) => {
-  console.log('a user connected');
-  socket.on('test', (msg) => {
-    console.log("test event received" + msg);
-  })
   socket.on('user connected', (socketId) => {
     io.emit("user connected", socketId)
   })
-  socket.on("disconnect", () => {
-    console.log("a user disconnected")
-  });
   socket.on("user disconnected", (socketId) => {
-    console.log("new-message event received " + socketId);
     io.emit("user disconnected", socketId);
   }); 
   socket.on("new-message", () => {
