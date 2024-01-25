@@ -56,10 +56,8 @@ app.post('/auth/register', async (req, res) => {
 
 app.post('/auth/login', async (req, res) => {
   let {username, password} = req.body
-
   let authService = new AuthService()
   let response = await authService.login(username, password)
-
   res.send(response)
 })
 
@@ -93,8 +91,15 @@ io.on('connection', (socket) => {
   socket.on('test', (msg) => {
     console.log("test event received" + msg);
   })
+  socket.on('user connected', (socketId) => {
+    io.emit("user connected", socketId)
+  })
   socket.on("disconnect", () => {
     console.log("a user disconnected")
-    io.emit("a user disconnected", socket.userId);
+    // io.emit("", socket.userId);
   });
+  socket.on("user disconnected", (socketId) => {
+    console.log("new-message event received " + socketId);
+    io.emit("user disconnected", socketId);
+  }); 
 });

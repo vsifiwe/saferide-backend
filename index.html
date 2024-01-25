@@ -116,12 +116,21 @@
     <script>
 
         const socket = io()
+        let token = null
 
         socket.on('new-message', () => {
             console.log('a new message received')
             getMessages()
         })
-        let token = null
+        socket.on('user connected', (socketId) => {
+            // console.log("Token: " + token + " New Token: " + newToken)
+            if (socketId !== socket.id)
+                alert('a new user connected')
+        })
+        socket.on('user disconnected', (socketId) => {
+            if(socket.id !== socketId && token !== null)
+                alert('a user disconnected')
+        })
 
         async function register(){
             const username = document.querySelector('input[name="username"]').value;
@@ -155,7 +164,7 @@
                 document.querySelector('.dashboard').style.display = 'block';
 
                 token = data.token;
-
+                socket.emit('user connected', socket.id)
                 getMessages();
             }else{
                 alert(data.message);
@@ -229,6 +238,7 @@
             token = null;
             document.querySelector('.dashboard').style.display = 'none';
             document.querySelector('.login').style.display = 'block';
+            socket.emit('user disconnected', socket.id)
         }
     </script>
 </body>
