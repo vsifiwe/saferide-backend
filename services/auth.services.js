@@ -16,7 +16,7 @@ class AuthService {
     const user = await User.findOne({ where: { username: username } })
 
     if (user) {
-      // compare password
+      // compare password and return corresponding message
       if (bcrypt.compareSync(password, user.password)) {
         const token = await this.generateToken(user)
         return {
@@ -40,21 +40,20 @@ class AuthService {
 
   register = async (username, password) => {
     // hash password
-
     let hash = await bcrypt.hash(password, this.saltRounds)
 
     // check if user exists
     const user = await User.findOne({ where: { username: username } })
 
+    // if user exists return error message
     if (user) {
       return {
         "message": "User already exists",
         "code": 409,
       }
     }
-    // create user
+    // create user and return success message
     await User.create({ username: username, password: hash })
-    // return user
     return {
       "message": "User created successfully",
       "code": 200,

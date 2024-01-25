@@ -14,7 +14,6 @@
         }
 
         .login {
-            /* display: none; */
             max-width: 100vw;
         }
 
@@ -52,6 +51,9 @@
 
         .messages {
             padding: 10px 0px;
+            height: 50vh;
+            overflow-x: hidden;
+            overflow-y: auto;
         }
 
         .message {
@@ -115,18 +117,19 @@
     <script src="/socket.io/socket.io.js"></script>
     <script>
 
+        // define variables
         const socket = io()
         let token = null
 
         socket.on('new-message', () => {
-            console.log('a new message received')
             getMessages()
         })
+
         socket.on('user connected', (socketId) => {
-            // console.log("Token: " + token + " New Token: " + newToken)
-            if (socketId !== socket.id)
+            if (socketId !== socket.id && token !== null)
                 alert('a new user connected')
         })
+
         socket.on('user disconnected', (socketId) => {
             if(socket.id !== socketId && token !== null)
                 alert('a user disconnected')
@@ -170,7 +173,6 @@
                 alert(data.message);
             }
         }
-
 
         async function getMessages(){
 
@@ -229,6 +231,7 @@
 
             if(data.code === 200){
                 document.querySelector('input[name="message"]').value = '';
+                socket.emit('new-message', '')
             }else{
                 alert(data.message);
             }
