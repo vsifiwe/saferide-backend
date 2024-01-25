@@ -43,6 +43,11 @@ Make sure you have the following installed on your machine:
 
 The application will be running at `http://localhost:3000`.
 
+5. Test the application using the following accounts: 
+- username: `Hakan`     Password: `password`
+- username: `cecile`    Password: `password`
+- username: `user`      Password: `password`
+
 ## Folder Structure
 
 - **`/public`**: Static files (CSS, client-side JavaScript).
