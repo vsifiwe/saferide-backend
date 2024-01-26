@@ -10,7 +10,7 @@
   "name": "chatroom",
   "version": "1.0.0",
   "description": "FSE Chat Room",
-  "main": "index.js",
+  "main": "server.js",
   "repository": "https://github.com/vsifiwe/chatroom.git",
   "author": "Manzi Elyse <asifiwemanzi@gmail.com>",
   "license": "MIT",
@@ -18,7 +18,7 @@
     "nodemon": "^3.0.2"
   },
   "scripts": {
-    "start": "node index.js",
-    "dev": "nodemon index.js"
+    "start": "node server.js",
+    "dev": "nodemon server.js"
   }
 }

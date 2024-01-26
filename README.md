@@ -54,9 +54,11 @@ The application will be running at `http://localhost:3000`.
 - **`/src`**: Server-side code.
   - **`/routes`**: Express routes.
   - **`/models`**: SQLite database models.
-  - **`/controlleres`**: HTML views.
-  - **`/services`**: HTML views.
-  - **`/helpers`**: HTML views.
+  - **`/controlleres`**: Route handlers.
+  - **`/services`**: Service handlers.
+  - **`/helpers`**: Miscellaneous handlers.
+- **`server.js`**: Server entry file.
+- **`index.html`**: HTML entry page.
 
 ## Database
 
