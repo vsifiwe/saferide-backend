@@ -22,7 +22,7 @@ class MailController {
             })
             .catch((error) => {
                 console.error(error)
-                res.send("error, not sent")
+                res.status(500).send("error, not sent")
             })
     }
 
